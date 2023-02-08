@@ -4,10 +4,10 @@ var request = require('request');
 
 const app = express();
 
-let accessToken = "";
 var CLIENT_ID = "c23486dfd16347c8acc94676e5010729";
 var CLIENT_SECRET = "413b7493c42c41638fb9dff162c854e4";
 const auth = Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64');
+let accessToken = "";
 
 const playlistId = "3t8vvCtggMRMk6R4vPJj9S";
 const SPOTIFY_API_URL = `https://api.spotify.com/v1/playlists/${playlistId}`;
@@ -18,7 +18,7 @@ const options = {
       "Authorization": `Basic ${auth}`
     },
     form: {
-      grant_type: "client_credentials"
+      grant_type: "client_credentials" // grant flow set 
     },
     json: true
 };
@@ -33,11 +33,11 @@ request.post(options, (error, response, body) => {
 });
 
 app.get('/', (req, res) => {
-    res.send("Add /songs after 4000 to display song names for playlistId " + playlistId);
+    res.send("Add /songs after 4000 to display song names for Playlist ID: " + playlistId);
 });
 
 
-// We can use this to redirect directly to '/songs' instead of the index page
+// We can use this to redirect directly to '/songs' instead of the index page. Comment-out above code to use
 // app.get('/', (req, res) => {
 //     res.redirect('/songs');
 // });

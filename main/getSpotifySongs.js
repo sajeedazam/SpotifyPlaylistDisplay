@@ -1,16 +1,17 @@
 const express = require('express');
 const axios = require('axios');
 var request = require('request');
-
+const bodyParser = require('body-parser');
 const app = express();
+app.use(bodyParser.urlencoded({ extended: true }));
 
 var CLIENT_ID = "c23486dfd16347c8acc94676e5010729";
 var CLIENT_SECRET = "413b7493c42c41638fb9dff162c854e4";
 const auth = Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64');
-let accessToken = "";
 
-const playlistId = "3t8vvCtggMRMk6R4vPJj9S";
-const SPOTIFY_API_URL = `https://api.spotify.com/v1/playlists/${playlistId}`;
+let accessToken = "";
+let playlistLink = "";
+let playlistId = "";
 
 const options = {
     url: "https://accounts.spotify.com/api/token",
@@ -18,7 +19,7 @@ const options = {
       "Authorization": `Basic ${auth}`
     },
     form: {
-      grant_type: "client_credentials" // grant flow set 
+      grant_type: "client_credentials"
     },
     json: true
 };
@@ -33,16 +34,25 @@ request.post(options, (error, response, body) => {
 });
 
 app.get('/', (req, res) => {
-    res.send("Add /songs after 4000 to display song names for Playlist ID: " + playlistId);
+    res.redirect('/form');
 });
 
+app.get('/form', (req, res) => {
+    const form = '<form action="/songs" method="POST">' +
+                    '<input type="text" name="playlistLink" placeholder="Paste" />' +
+                    '<button type="submit">Submit</button>' +
+                 '</form>';
+    res.send(form);
+});
 
-// We can use this to redirect directly to '/songs' instead of the index page. Comment-out above code to use
-// app.get('/', (req, res) => {
-//     res.redirect('/songs');
-// });
-
-app.get('/songs', (req, res) => {
+app.post('/songs', (req, res) => {
+    playlistLink = req.body.playlistLink;
+    if (!playlistLink) {
+        return res.status(400).send('Playlist Link is required');
+    }
+    const result = playlistLink.match(/playlist\/([^?]+)/);
+    playlistId = result[1];
+    const SPOTIFY_API_URL = `https://api.spotify.com/v1/playlists/${playlistId}`;
     axios.get(SPOTIFY_API_URL, {
       headers: {
         'Authorization': `Bearer ${accessToken}`
@@ -50,7 +60,7 @@ app.get('/songs', (req, res) => {
     })
     .then(response => {
       // https://developer.spotify.com/console/get-playlist/?playlist_id=3t8vvCtggMRMk6R4vPJj9S&market=&fields=&additional_types=  
-      const songs = response.data.tracks.items.map(item => item.track.name); // try track.popularity
+      const songs = response.data.tracks.items.map(item => item.track.name);
       console.log(songs);
       res.send({ songs });
     })

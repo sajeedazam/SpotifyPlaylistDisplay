@@ -1,5 +1,11 @@
 ## TransferMusic
 
+# 2023-02-05
+- Project init.
+
+# 2023-02-06
+- Downloaded dependencies. 
+
 # 2023-02-07
 - Able to retireve song names from a given playlist ID. 
 - Using Client ID and Client Secretkey from our Spotify Developer Account to get the Access Token (i.e., client credential grant flow).
@@ -9,3 +15,10 @@
 - Added Text bar to paste playlist link.
 - Uses regex expression to retrieve the Playlist ID from the URL.
 - Made use of the 'body-parser' package to retrive the submited text from the form.
+
+# 2023-02-09
+- Removed the use of 'request' package.
+- Parsed Artist names from Spotify's GET playlist json.
+- Concatenated song names with artist names.
+- Installed ejs for views.
+- Outputs a table of songs with artist names from a template using ejs.

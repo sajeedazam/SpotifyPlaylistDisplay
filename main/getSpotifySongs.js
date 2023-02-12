@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express');
 const axios = require('axios');
 const qs = require('querystring');
@@ -8,8 +9,8 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(bodyParser.urlencoded({ extended: true }));
 
-var CLIENT_ID = "c23486dfd16347c8acc94676e5010729";
-var CLIENT_SECRET = "413b7493c42c41638fb9dff162c854e4";
+var CLIENT_ID = process.env.CLIENT_ID;
+var CLIENT_SECRET = process.env.CLIENT_SECRET;
 
 let accessToken = "";
 let playlistLink = "";
@@ -66,7 +67,6 @@ app.post('/songs', (req, res) => {
       let songsWithArtists = [];
       for (let index = 0; index < songs.length; index++) {
         songsWithArtists[index] = songs[index] + " - " + artists[index];
-
       }
       res.render('songs', { songs: songsWithArtists });
     })

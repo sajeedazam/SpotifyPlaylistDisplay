@@ -1,5 +1,10 @@
 ## TransferMusic
 
+
+
+
+## UPDATES
+
 # 2023-02-05
 - Project init.
 
@@ -22,3 +27,9 @@
 - Concatenated song names with artist names.
 - Installed ejs for views.
 - Outputs a table of songs with artist names from a template using ejs.
+
+# 2023-02-11
+- Cleaned up packages and dependencies.
+- Added a .gitignore file.
+- Used dotenv files to hide sensitive data.
+- Used nodemon package.
